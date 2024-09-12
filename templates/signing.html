@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>sign.in.up</title>
+</head>
+<body>
+    <form action="/sign.in.up" method="post" name="sign_in_up_form">
+        <input type="text" name="email_input" id="email_input" placeholder="example@gmail.com" {% if default_input_values['email'] != None %} value="{{ default_input_values['email'] }}" {%endif%}>
+
+        {% if sign_in_or_sign_up == "undetermined" %}
+        <input type="submit" value="Sign in/up">
+        {% endif %}
+
+        {% if sign_in_or_sign_up == "sign_in" %}
+            <input type="text" name="password_input" id="password_input" placeholder="************">
+            <input type="submit" value="Sign in">
+        {% endif %}
+
+        {% if sign_in_or_sign_up == "sign_up" %}
+            <input type="text" name="password_input2" id="password_input2" placeholder="************">
+            <input type="text" name="password_confirmation_input" id="password_confirmation_input" placeholder="************">
+            <input type="submit" value="Sign up">
+        {% endif %}
+    </form>
+</body>
+</html>
