@@ -10,7 +10,7 @@ class userDB:
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                e_mail TEXT NOT NULL,
+                email TEXT NOT NULL,
                 password TEXT NOT NULL
             )
         ''')
@@ -19,10 +19,7 @@ class userDB:
 
     def open_close_bdd(self, *data):
         if data[0] == 0:
-            if __name__ is "__main__":
-                conn = sqlite3.connect('../../user_db.db')
-            else:
-                conn = sqlite3.connect('user_db.db')
+            conn = sqlite3.connect('user_db.db')
             cursor = conn.cursor()
             return conn, cursor
         if data[0] == 1:
@@ -33,21 +30,35 @@ class userDB:
         conn, cursor = self.open_close_bdd(0)
         cursor.execute("SELECT * FROM users")
         users_data = cursor.fetchall()
-        print(users_data)
         self.open_close_bdd(1, conn)
         return users_data
 
     def fetch_all_emails(self):
         conn, cursor = self.open_close_bdd(0)
-        cursor.execute("SELECT e_mail FROM users")
-        all_emails = cursor.fetchall()
-        print(f"from fetch_all_emails : {all_emails}")
+        cursor.execute("SELECT email FROM users")
+        emails = cursor.fetchall()
         self.open_close_bdd(1, conn)
-        return all_emails
+        return emails
+
+    def get_id_by_email(self, email):
+        conn, cursor = self.open_close_bdd(0)
+        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+        conn.commit()
+        email = cursor.fetchone()[0]
+        self.open_close_bdd(1, conn)
+        return email
+
+    def get_username_by_id(self, id):
+        conn, cursor = self.open_close_bdd(0)
+        cursor.execute("SELECT email FROM users WHERE id = ?", (id,))
+        conn.commit()
+        id = cursor.fetchone()[0]
+        self.open_close_bdd(1, conn)
+        return id
 
     def create_user(self, name, e_mail, password):
         conn, cursor = self.open_close_bdd(0)
-        cursor.execute("INSERT INTO users (name, e_mail, password) VALUES (?, ?, ?)", (name, e_mail, password))
+        cursor.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (name, e_mail, password))
         conn.commit()
         self.open_close_bdd(1, conn)
 
@@ -69,7 +80,6 @@ if __name__ == "__main__":
         else:
             continue
 
-"""
     conn, cursor = user_db.open_close_bdd(0)
     # Delete the tests (and erase all db
     cursor.execute("DELETE FROM users")
@@ -77,4 +87,3 @@ if __name__ == "__main__":
     cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'users'")
     conn.commit()
     user_db.open_close_bdd(1, conn)
-"""

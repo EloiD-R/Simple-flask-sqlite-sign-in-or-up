@@ -67,7 +67,7 @@ def manage_sign_up(user_db, sign_in_or_sign_up, email):
             user_db.create_user(email, username, password)
             print(f"from manage_sign_up : user created")
             session["login_state"] = True
-            session["email"] = email
+            session["user_email"] = email
             user_created = True
 
     elif sign_in_or_sign_up["state"] == "sign_in":

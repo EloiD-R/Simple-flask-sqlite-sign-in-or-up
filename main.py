@@ -5,12 +5,17 @@ from flask import Flask, render_template, request, redirect, url_for, session, r
 
 """Code"""
 
-def init_session_cookies():
-    if 'login_state' not in session:
+def init_session_cookies(user_db):
+    if 'login_state' not in session or session['login_state'] is None:
         session['login_state'] = False
         session['user_id'] = None
         session['username'] = None
         session['user_email'] = None
+    else:
+        if session['login_state'] is True:
+            print("c")
+            session['user_id'] = user_db.get_id_by_email(session['user_email'])
+            session['username'] = user_db.get_username_by_id(session['user_id'])
 
 """Main flask_app"""
 if __name__ == "__main__":
@@ -25,7 +30,7 @@ if __name__ == "__main__":
     @flask_app.route("/", methods=["GET", "POST"])
     def route_index():
         # If there are no session cookies
-        init_session_cookies()
+        init_session_cookies(user_db)
 
         # Check if user is connected, redirect him to the right place
         if session['login_state'] is True:
@@ -37,7 +42,7 @@ if __name__ == "__main__":
     @flask_app.route("/sign.in.up", methods=["GET", "POST"])
     def route_sign_in_or_up():
         # If there are no session cookies
-        init_session_cookies()
+        init_session_cookies(user_db)
 
         # Check if user is connected, redirect him to the right place
         if session['login_state'] is True:
@@ -49,7 +54,7 @@ if __name__ == "__main__":
     @flask_app.route("/home", methods=["GET", "POST"])
     def route_home():
         # If there are no session cookies
-        init_session_cookies()
+        init_session_cookies(user_db)
 
         # Check if user is connected, redirect him to the right place
         if session['login_state'] is True:
