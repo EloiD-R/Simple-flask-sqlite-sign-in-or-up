@@ -19,7 +19,10 @@ class userDB:
 
     def open_close_bdd(self, *data):
         if data[0] == 0:
-            conn = sqlite3.connect('../../user_db.db')
+            if __name__ is "__main__":
+                conn = sqlite3.connect('../../user_db.db')
+            else:
+                conn = sqlite3.connect('user_db.db')
             cursor = conn.cursor()
             return conn, cursor
         if data[0] == 1:
@@ -38,7 +41,7 @@ class userDB:
         conn, cursor = self.open_close_bdd(0)
         cursor.execute("SELECT e_mail FROM users")
         all_emails = cursor.fetchall()
-        print(all_emails)
+        print(f"from fetch_all_emails : {all_emails}")
         self.open_close_bdd(1, conn)
         return all_emails
 
