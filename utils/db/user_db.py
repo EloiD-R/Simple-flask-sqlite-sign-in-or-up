@@ -1,69 +1,51 @@
 import sqlite3
 
 class userDB:
-    def __init__(self):
-        # Connect to an existing SQLite database or create a new one
-        conn, cursor = self.open_close_bdd(0)
+    def __init__(self, name: str = "user_db"):
+        # connect to an existing SQLite database or create a new one
+        self.conn = sqlite3.connect(name + ".db")
+        self.cursor = self.conn.cursor()
 
         # Example: Create a table and the db if not existing
-        cursor.execute('''
+        self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
+                username TEXT NOT NULL,
                 email TEXT NOT NULL,
                 password TEXT NOT NULL
             )
         ''')
-        conn.commit()
-        self.open_close_bdd(1, conn)
+        self.conn.commit()
 
-    def open_close_bdd(self, *data):
-        if data[0] == 0:
-            conn = sqlite3.connect('user_db.db')
-            cursor = conn.cursor()
-            return conn, cursor
-        if data[0] == 1:
-            data[1].close()
-            return True
 
     def fetch_all_user_data(self):
-        conn, cursor = self.open_close_bdd(0)
-        cursor.execute("SELECT * FROM users")
-        users_data = cursor.fetchall()
-        self.open_close_bdd(1, conn)
+        self.cursor.execute("SELECT * FROM users")
+        users_data = self.cursor.fetchall()
         return users_data
 
     def fetch_all_emails(self):
-        conn, cursor = self.open_close_bdd(0)
-        cursor.execute("SELECT email FROM users")
-        emails = cursor.fetchall()
-        self.open_close_bdd(1, conn)
+        self.cursor.execute("SELECT email FROM users")
+        emails = self.cursor.fetchall()
         return emails
 
     def get_id_by_email(self, email):
-        conn, cursor = self.open_close_bdd(0)
-        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
-        conn.commit()
-        email = cursor.fetchone()[0]
-        self.open_close_bdd(1, conn)
-        return email
+        self.cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+        self.conn.commit()
+        return self.cursor.fetchone()[0]
 
     def get_username_by_id(self, id):
-        conn, cursor = self.open_close_bdd(0)
-        cursor.execute("SELECT email FROM users WHERE id = ?", (id,))
-        conn.commit()
-        id = cursor.fetchone()[0]
-        self.open_close_bdd(1, conn)
-        return id
+        self.cursor.execute("SELECT username FROM users WHERE id = ?", (id,))
+        self.conn.commit()
+        return self.cursor.fetchone()[0]
 
     def create_user(self, name, e_mail, password):
-        conn, cursor = self.open_close_bdd(0)
-        cursor.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (name, e_mail, password))
-        conn.commit()
-        self.open_close_bdd(1, conn)
+        self.cursor.execute("INSERT INTO users (email, username, password) VALUES (?, ?, ?)", (name, e_mail, password))
+        self.conn.commit()
+
+    def quit_db(self):
+        self.conn.close()
 
 
-# ! DANGEROUS ! EXECUTING THIS CODE WILL DELETE ALL DATA FROM THE DB
 if __name__ == "__main__":
     user_db  = userDB()
 
@@ -79,11 +61,3 @@ if __name__ == "__main__":
             break
         else:
             continue
-
-    conn, cursor = user_db.open_close_bdd(0)
-    # Delete the tests (and erase all db
-    cursor.execute("DELETE FROM users")
-    # Reset id counter to 0
-    cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'users'")
-    conn.commit()
-    user_db.open_close_bdd(1, conn)
