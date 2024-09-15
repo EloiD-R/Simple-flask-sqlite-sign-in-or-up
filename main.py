@@ -1,7 +1,7 @@
 from app.signing_manager import load_signing_page
 from app.home_page import load_home_page
-from utils.db.user_db import userDB
-from flask import Flask, render_template, request, redirect, url_for, session, render_template_string, g
+from app.utils.db.user_db import userDB
+from flask import Flask, redirect, session, render_template_string, g
 
 """Code"""
 def init_session_cookies(user_db):
