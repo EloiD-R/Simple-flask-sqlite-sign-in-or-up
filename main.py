@@ -6,13 +6,10 @@ from flask import Flask, redirect, session, render_template_string, g
 """Code"""
 def init_session_cookies(user_db):
     if 'login_state' not in session or session['login_state'] is None:
-        print("a")
+        session.clear()
         session['login_state'] = False
-        session['user_id'] = None
-        session['username'] = None
-        session['user_email'] = None
 
-    if session['login_state'] is True:
+    elif session['login_state'] is True:
         session['user_id'] = user_db.get_id_by_email(session['user_email'])
         session['username'] = user_db.get_username_by_id(session['user_id'])
 
