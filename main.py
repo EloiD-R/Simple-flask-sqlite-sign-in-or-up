@@ -77,4 +77,4 @@ if __name__ == "__main__":
         else:
             return redirect("sign.in.up")
 
-    flask_app.run(debug=True)
+    flask_app.run(debug=True, host="0.0.0.0", port=80)

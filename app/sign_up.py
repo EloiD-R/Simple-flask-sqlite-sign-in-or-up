@@ -1,7 +1,7 @@
 """IMPORTS"""
 from flask import Flask, render_template, request, redirect, url_for, session
 import app.utils.signing_utils as signing_utils
-from utils.db import *
+from app.utils.db import *
 import re
 
 sign_up_form_inputs = {"email" : None, "username" : None, "password" : None, "password_confirmation" : None}
