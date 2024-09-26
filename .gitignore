@@ -1,0 +1,21 @@
+# Ignore database files
+*.db
+
+# Ignore Python cache files
+__pycache__/
+App/__pycache__/
+App/utils/__pycache__/
+App/utils/db/__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Ignore environment variable files
+*.env
+
+# Ignore JetBrains IDE folder (e.g., PyCharm)
+.idea/

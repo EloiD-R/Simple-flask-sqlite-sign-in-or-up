@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>signing manager with flask and sqlite</title>
+</head>
+<body>
+    {% if session.get("login_state") == True %}
+        <a href="/home"><button>Go to home</button></a>
+    {% endif %}
+    {% if session.get("login_state") != True %}
+        <a href="/home"><button>Sign in/up</button></a>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>sign.in.up</title>
+</head>
+<body>
+    <form action="/sign.in.up" method="post" name="sign_in_up_form">
+        <input type="text" name="email_input" id="email_input" placeholder="example@gmail.com" {% if session['user_email'] != None %} value="{{ session['user_email'] }}" {%endif%} {% if sign_in_or_sign_up['state'] == "undetermined" %} autofocus {% endif %} required>
+        <input type="submit" value="Sign in/up">
+        <br>
+
+        {% if sign_in_or_sign_up["state"] == "sign_up" %}
+            {% if sign_in_or_sign_up["phase"] == 1 %}
+                <input type="text" name="username_input" id="username_input" placeholder="username" {% if session['username'] != None %} value="{{ session['username'] }}" {%endif%}autofocus required>
+                <input type="submit" value="next step">
+            {% endif %}
+
+            {% if sign_in_or_sign_up["phase"] == 2 %}
+                <input type="text" name="username_input" id="username_input" placeholder="username" {% if session['username'] != None %} value="{{ session['username'] }}" {%endif%} required><br>
+                <input type="password" name="password_input" id="password_input" placeholder="Password" {% if session['username'] != None %} value="{{ session['username'] }}" {%endif%} autofocus required>
+                <input type="submit" value="next step">
+            {% endif %}
+
+
+            {% if sign_in_or_sign_up["phase"] == 3 %}
+                <input type="text" name="username_input" id="username_input" placeholder="username" {% if default_input_values != None %} value="{{ session['username'] }}" {%endif%} required><br>
+                <input type="password" name="password_input" id="password_input" placeholder="Password" {% if session['username'] != None %} value="{{ session['username'] }}" {%endif%} required><br>
+                <input type="password" name="password_confirmation_input" id="password_confirmation_input" placeholder="Password confirmation" {% if session['username'] != None %} value="{{ session['username'] }}" {%endif%}" autofocus required>
+                <input type="submit" value="next step">
+            {% endif %}
+        {% endif %}
+
+        {% if sign_in_or_sign_up == "sign_in" %}
+            <input type="password" name="password_input" id="password_input" placeholder="************" autofocus required>
+            {% if error_message %} <p class="error_message">{{ error_message }}</p> {% endif %}
+            <input type="submit" value="next step">
+        {% endif %}
+    </form>
+
+    {% if error_message %}
+        <p class="error_message">{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>
