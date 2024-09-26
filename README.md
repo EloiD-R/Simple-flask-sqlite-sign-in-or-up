@@ -38,6 +38,9 @@ Simple-flask-sqlite-sign-in-or-up
 - "login_state" : bool, determines if the user's connected or not
 - "email"/"name" : str, if the user's not connected -> None | else -> email/name loaded in session after signing in/up
 
+## userDB
+// Todo
+
 ## Python files :
 
 ### main.py
