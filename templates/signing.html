@@ -5,17 +5,34 @@
     <title>signing manager with flask and sqlite</title>
 </head>
 <body>
-    {# Phase 1 : only show email #}
+
     <form action="sign.in.up" method="post">
-        <input type="text" name="email" id="email" placeholder="email" {% if session.get("email") %}value="{{ session.get("email") }}"{% endif %} required>
+        {# Phase 0 : only show email #}
+        <input type="text" name="email" id="email" placeholder="email" {% if session.get("email") %} value="{{ session.get("email") }}" {% endif %} required>
+        {% if feedback_messages["email_field"] %} {{ feedback_messages["email_field"]}} {% endif %}
+
+        {# email determines if it is a sign in or up #}
         {% if session.get("signing_state") == "sign_up" %}
             {% if session.get("signing_phase") > 0 %}
-                <input type="text" name="username" id="username" placeholder="username" {% if session.get("username") %}value="{{ session.get("username") }}"{% endif %}required>
+                <input type="text" name="username" id="username" placeholder="username" {% if session.get("username") %} value="{{ session.get("username") }}" {% endif %} required>
+                {% if feedback_messages["username_field"]%} {{ feedback_messages["username_field"]}} {% endif %}
             {% endif %}
+
             {% if session.get("signing_phase") > 1 %}
-                <input type="text" name="password" id="password" placeholder="password"  required>
+                <input type="text" name="password" id="password" placeholder="password" required>
+
+                {% if feedback_messages["password_field"] %} {{ feedback_messages["password_field"]}} {% endif %}
+
+                <input type="submit" name="submit_button" id="submit_button" value="sign up" required>
             {% endif %}
         {% endif %}
+
+
+        {% if session.get("signing_state") == "sign_in" %}
+            <input type="text" name="password" id="password" placeholder="password" required>
+            <input type="submit" name="submit_button" id="submit_button" value="sign up" required>
+        {% endif %}
+
     </form>
 
 

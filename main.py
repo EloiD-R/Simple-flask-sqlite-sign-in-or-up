@@ -34,8 +34,6 @@ if __name__ == "__main__":
 
     @flask_app.before_request
     def check_if_user_is_connected():
-        session["signing_state"] = "sign_up"
-        session["signing_phase"] = 0
         EXCLUDED_ROUTES = ["route_sign_in_or_up", "route_index"]  # add routes as needed
         route_to_load = request.endpoint # To make the code more readable
 
@@ -69,7 +67,7 @@ if __name__ == "__main__":
 
     @flask_app.route("/sign.in.up", methods=["GET", "POST"])
     def route_sign_in_or_up():
-        return signing_manager.load()
+        return signing_manager.load(get_user_db())
 
     @flask_app.errorhandler(404)
     def handle_404(error):
