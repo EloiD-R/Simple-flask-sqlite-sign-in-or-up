@@ -74,9 +74,29 @@ otherwise redirect to sign.in.up,
     - [Load home.html](#homehtml)
 
 ### App/signing_manager.py
-##### Sign up :
-> For the password, I don't want to send it back and forth between client and server especially in cookies, so I just store
+##### Functions :
+- load(user_db)
+  - initialize a dictionary called feedback_messages, essentially storing the errors or success messages for each input field on the html
+  - gets the email from the form, if it's None, tries to get it from cookies, if it's something puts the email in cookies. This is due to the @before_request verification which otherwise creates a strange bug i haven't really understood but basically, it doesn't work anymore or only if the cookies are already initiated, i really don't know why but it is base on the fact that the page is doing the request two times and so the form is reset and yeah...
+  - calls check_email
+    - if email's alright :
+      - determine signing state and sets the email's feedback message to valid
+      - determines signing phase
+      - if state is sign up
+        - // todo : username, password, ...
+      - if state is sign in
+        - // todo : password
+    - if email's not alright : email's feedback message is changed to an error
+    - if there are no email : do nothing
 
+ - determine_signing_state(user_db, email), needs an already checked email, basically go through all emails in userdb 
+and checks if the given one is matching one of them, if yes returns "sign_in", else returns "sign_up"
+determine_signing_phase()
+ - if state is sign_in : returns 1 bc phase 1 is password for sigin in
+check_email(email)
+- if there are no email : return None, if there is : if it matches the regex pattern : return True, else : return False
+ 
+ 
 ## HTML files (located in /templates) :
 
 ##### index.html

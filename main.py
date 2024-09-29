@@ -31,7 +31,6 @@ if __name__ == "__main__":
             print(f"Closing user_db : {exception}")
             db.quit_db()
 
-
     @flask_app.before_request
     def check_if_user_is_connected():
         EXCLUDED_ROUTES = ["route_sign_in_or_up", "route_index"]  # add routes as needed
@@ -54,8 +53,6 @@ if __name__ == "__main__":
             if session.get('login_state') is not None and route_to_load == "route_sign_in_or_up":
                 return redirect("/home") # If user's connected he will be redirected to home
             # Else, continue and load request (from EXCLUDED_ROUTES)
-
-
 
     @flask_app.route("/", methods=["GET", "POST"])
     def route_index():
