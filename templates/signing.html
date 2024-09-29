@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>signing manager with flask and sqlite</title>
+</head>
+<body>
+    {# Phase 1 : only show email #}
+    <form action="sign.in.up" method="post">
+        <input type="text" name="email" id="email" placeholder="email" {% if session.get("email") %}value="{{ session.get("email") }}"{% endif %} required>
+        {% if session.get("signing_state") == "sign_up" %}
+            {% if session.get("signing_phase") > 0 %}
+                <input type="text" name="username" id="username" placeholder="username" {% if session.get("username") %}value="{{ session.get("username") }}"{% endif %}required>
+            {% endif %}
+            {% if session.get("signing_phase") > 1 %}
+                <input type="text" name="password" id="password" placeholder="password"  required>
+            {% endif %}
+        {% endif %}
+    </form>
+
+
+</body>
+</html>

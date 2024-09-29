@@ -1,4 +1,4 @@
-# Simple flask - sqlite - signin/up :
+_# Simple flask - sqlite - signin/up :
 
 ## Technical "facts" :
 
@@ -37,9 +37,12 @@ Simple-flask-sqlite-sign-in-or-up
 ### Session cookies :
 - "login_state" : bool, determines if the user's connected or not
 - "email"/"name" : str, if the user's not connected -> None | else -> email/name loaded in session after signing in/up
+- "signing_state" : str, used by signing_manager.py and signing.html, can be "sign_in" or "sign_up", determines the type of signing
+- "signing_phase" : int, used by signing_manager.py and signing.html, can be from 1 (username) to 2/3 (depends on password or password confirm for sign_up, on sign_in only gos to 1 : password), determines the inputs to load
+
 
 ## userDB
-// Todo
+// Todo : document
 
 ## Python files :
 
@@ -71,7 +74,8 @@ otherwise redirect to sign.in.up,
     - [Load home.html](#homehtml)
 
 ### App/signing_manager.py
-> Grosse galère
+##### Sign up :
+> For the password, I don't want to send it back and forth between client and server especially in cookies, so I just store
 
 ## HTML files (located in /templates) :
 
@@ -83,4 +87,4 @@ otherwise redirect to sign.in.up,
   
 ### HTTP errors :
 ##### 404
-> returns the error
+> returns the error_

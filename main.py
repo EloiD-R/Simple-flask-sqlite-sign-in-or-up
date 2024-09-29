@@ -2,7 +2,7 @@
 from os import getenv
 
 from flask import Flask, redirect, session, render_template_string, request, g
-from App import index, home
+from App import index, home, signing_manager
 from App.utils.db.user_db import *
 
 
@@ -34,6 +34,8 @@ if __name__ == "__main__":
 
     @flask_app.before_request
     def check_if_user_is_connected():
+        session["signing_state"] = "sign_up"
+        session["signing_phase"] = 0
         EXCLUDED_ROUTES = ["route_sign_in_or_up", "route_index"]  # add routes as needed
         route_to_load = request.endpoint # To make the code more readable
 
@@ -67,7 +69,7 @@ if __name__ == "__main__":
 
     @flask_app.route("/sign.in.up", methods=["GET", "POST"])
     def route_sign_in_or_up():
-        return render_template_string("sign.in.up")
+        return signing_manager.load()
 
     @flask_app.errorhandler(404)
     def handle_404(error):
