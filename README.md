@@ -1,4 +1,4 @@
-_# Simple flask - sqlite - signin/up :
+# Simple flask - sqlite - signin/up :
 
 ## Technical "facts" :
 
