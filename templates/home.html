@@ -11,5 +11,8 @@
         <br>
         - email : {{ session.get("email") }}
     </p>
+    <form action="/home" method="post">
+        <a href="/"><input type="submit" value="logout" name="logout" id="logout"></a>
+    </form>
 </body>
 </html>

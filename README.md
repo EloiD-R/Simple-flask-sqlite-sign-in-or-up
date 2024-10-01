@@ -77,23 +77,35 @@ otherwise redirect to sign.in.up,
 ##### Functions :
 - load(user_db)
   - initialize a dictionary called feedback_messages, essentially storing the errors or success messages for each input field on the html
-  - gets the email from the form, if it's None, tries to get it from cookies, if it's something puts the email in cookies. This is due to the @before_request verification which otherwise creates a strange bug i haven't really understood but basically, it doesn't work anymore or only if the cookies are already initiated, i really don't know why but it is base on the fact that the page is doing the request two times and so the form is reset and yeah...
+  - gets the email with get_input
   - calls check_email
     - if email's alright :
       - determine signing state and sets the email's feedback message to valid
       - determines signing phase
-      - if state is sign up
-        - // todo : username, password, ...
-      - if state is sign in
-        - // todo : password
     - if email's not alright : email's feedback message is changed to an error
-    - if there are no email : do nothing
+    - if there are no email : do 
+    
+    - if state is sign up
+        - if phase is less than 0:
+          - get_input(username)
+        - if it is more than 1:
+          - get_input(password) # Not definitive cause we don't want the password to be in the cookies
+        
+    - if state is sign in
+      - // todo : password
+    
+  - renders the template and gives it the feedback messages
 
- - determine_signing_state(user_db, email), needs an already checked email, basically go through all emails in userdb 
+- get_input(field)
+  - get input of field from the form, if it's None, tries to get it from cookies, if it's something puts it in cookies. This is due to the @before_request verification which otherwise creates a strange bug i haven't really understood but basically, it doesn't work anymore or only if the cookies are already initiated, i really don't know why but it is base on the fact that the page is doing the request two times and so the form is reset and yeah...
+  
+- determine_signing_state(user_db, email), needs an already checked email, basically go through all emails in userdb 
 and checks if the given one is matching one of them, if yes returns "sign_in", else returns "sign_up"
 determine_signing_phase()
- - if state is sign_in : returns 1 bc phase 1 is password for sigin in
+
+- if state is sign_in : returns 1 bc phase 1 is password for sigin in
 check_email(email)
+
 - if there are no email : return None, if there is : if it matches the regex pattern : return True, else : return False
  
  
@@ -107,4 +119,6 @@ check_email(email)
   
 ### HTTP errors :
 ##### 404
-> returns the error_
+> returns the error
+
+# Add a verif so cookies are cleared and email's re put in cookies if signing state changes

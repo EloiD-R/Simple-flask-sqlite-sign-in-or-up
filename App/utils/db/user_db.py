@@ -28,8 +28,18 @@ class userDB:
         emails = self.cursor.fetchall()
         return emails
 
+    def get_password_hash_by_email(self, email):
+        self.cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
+        self.conn.commit()
+        return self.cursor.fetchone()[0]
+
     def get_id_by_email(self, email):
         self.cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+        self.conn.commit()
+        return self.cursor.fetchone()[0]
+
+    def get_username_by_email(self, email):
+        self.cursor.execute("SELECT username FROM users WHERE email = ?", (email,))
         self.conn.commit()
         return self.cursor.fetchone()[0]
 
@@ -38,8 +48,8 @@ class userDB:
         self.conn.commit()
         return self.cursor.fetchone()[0]
 
-    def create_user(self, name, e_mail, password):
-        self.cursor.execute("INSERT INTO users (email, username, password) VALUES (?, ?, ?)", (name, e_mail, password))
+    def create_user(self, name, email, password):
+        self.cursor.execute("INSERT INTO users (email, username, password) VALUES (?, ?, ?)", (name, email, password))
         self.conn.commit()
 
     def quit_db(self):
