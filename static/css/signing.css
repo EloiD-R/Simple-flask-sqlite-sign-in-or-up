@@ -1,0 +1,92 @@
+/* I'm not a frontend dev so i made it along with some codepen guys and chatgpt */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+body{
+    background-color: #394053;
+    background-size: cover;
+    font-family: "Quicksand", sans-serif;
+    height: 100%; /* Ensure body takes full height */
+    margin: 0; /* Remove any default margin */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    overflow: hidden;
+}
+
+
+#go_back_button, #go_home_button {
+    background: none; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0; /* Remove padding */
+    font: inherit; /* Inherit font properties */
+    cursor: pointer; /* Change cursor to pointer */
+    text-decoration: none;
+    font-size: large;
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    top: 5px;
+
+}
+#go_back_button{
+    left: 5px;
+}
+#go_home_button{
+    right: 5px;
+}
+
+#main_form_container {
+    width: 30vw;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/static/images/blob.svg");
+    background-size: 110%;
+    background-position: top right;
+    margin-top: 4%; /* Adjust this value as needed */
+}
+
+#main_form {
+  width: 23vw;
+  color: white;
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  border-radius: 15px; /* Rounded corners */
+  backdrop-filter: blur(10px); /* Blur the background */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Slight shadow for depth */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Thin white border */
+  padding: 20px; /* Inner padding */
+  transition: transform 0.5s ease;
+}
+
+#main_form:hover {
+    transform: scale(1.1); /* Slight scale on hover */
+}
+
+/* Add spacing between input fields */
+#main_form input {
+    display: block;
+    width: 100%; /* Make the inputs full width */
+    padding: 10px; /* Add some padding inside the inputs */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+/* Add spacing for submit buttons */
+#main_form input[type="submit"] {
+    margin-top: 30px; /* Slightly larger space above submit buttons */
+    padding: 10px; /* Padding for the button */
+}
+
+#main_form input[type="text"], input[type="password"]{
+    margin-top: 5px;
+    border-radius: 10px;
+}
+
+#username_feedback_message, #email_feedback_message, #sign_in_password_feedback_message, #sign_up_password_feedback_message{
+    font-size: small;
+    font-weight: bold;
+}
+
+#email_form, #username_form, #sign_up_password_form, #sign_in_password_form {
+    margin-bottom: 15px;
+}

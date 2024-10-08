@@ -2,40 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/signing.css">
     <title>signing manager with flask and sqlite</title>
-</head>
-<body>
-    {# So it doesn't show if user just created his account #}
-    {% if session[login_state] != True %}
-        <form action="sign.in.up" method="post">
-            {# Phase 0 : only show email #}
-            <input type="text" name="email" id="email" placeholder="email" {% if session.get("email") %} value="{{ session.get("email") }}" {% endif %} {% if not session.get("signing_state") %} autofocus {% endif %}>
-            {% if feedback_messages["email_field"] %} {{ feedback_messages["email_field"]}} {% endif %}
-            {% if session.get("signing_phase") == 0 %} <input type="submit" name="submit_button" id="submit_button" value="sign in/up"> {% endif %}
+    {# For css code that's not static #}
+    <style>
+        {% if feedback_messages["email_field"] %}
+            #email_feedback_message {
+                color: {% if feedback_messages["email_field"] == "Please enter a valid email address" %} red {% else %} #00ff00 {% endif %};
+            }
+        {% endif %}
+        {% if feedback_messages["username_field"] %}
+            #username_feedback_message {
+                color: {% if feedback_messages["username_field"] == "Username valid" %} #00ff00 {% else %} red {% endif %};
+            }
+        {% endif %}
+        {% if feedback_messages["password_field"] %}
+            #sign_up_password_feedback_message, #sign_in_password_feedback_message {
+                color: {% if feedback_messages["password_field"] == "Password valid" %} #00ff00 {% else %} red {% endif %};
+            }
+        {% endif %}
+    </style>
 
+<body>
+    <div id="go_back_container">
+        <a id="go_back_link" href="/"><button id="go_back_button"><- Back</button></a>
+    </div>
+    <div id="go_home_container">
+        <a id="go_home_link" href="/home"><button id="go_home_button">Home -></button></a>
+    </div>
+    <div id="main_form_container">
+        <form action="sign.in.up" method="post" id="main_form">
+            {% if session.get("signing_state") %}
+                {% if session.get("signing_state") == "sign_up" %}
+                    <h2>Sign up</h2>
+                {% endif %}
+                {% if session.get("signing_state") == "sign_in" %}
+                    <h2>Sign in</h2>
+                {% endif %}
+            {% endif %}
+            {% if not session.get("signing_state") %}
+                <h2>Sign in/up</h2>
+            {% endif %}
+
+            <div id="email_form" >
+                {# Phase 0 : only show email #}
+                <label for="email">Email :</label>
+                <input type="text" name="email" id="email" placeholder="email" {% if session.get("email") %} value="{{ session.get("email") }}" {% endif %} {% if not session.get("signing_state") %} autofocus {% endif %}>
+                {% if feedback_messages["email_field"] %}
+                    <div id="email_feedback_message">
+                        {{ feedback_messages["email_field"]}}
+                    </div>
+                {% endif %}
+                {% if session.get("signing_phase") == 0 %}
+                    <div id="email_submit_button_container">
+                        <input type="submit" name="email_submit_button" id="email_submit_button" value="sign in/up">
+                    </div>
+                {% endif %}
+            </div>
             {# email determines if it is a sign in or up #}
             {% if session.get("signing_state") == "sign_up" %}
-                {% if session.get("signing_phase") > 0 %}
-                    <input type="text" name="username" id="username" placeholder="username" {% if session.get("username") %} value="{{ session.get("username") }}" {% endif %} {% if session.get("signing_phase") == 1 %}autofocus{% endif %}>
-                    {% if feedback_messages["username_field"]%} {{ feedback_messages["username_field"]}} {% endif %}
-                    {% if session.get("signing_phase") == 1 %} <input type="submit" name="submit_button" id="submit_button" value="continue"> {% endif %}
-                {% endif %}
+                <div id="sign_up_form">
+                    {% if session.get("signing_phase") > 0 %}
+                        <div id="username_form">
+                            <label for="username">Username :</label>
+                            <input type="text" name="username" id="username" placeholder="username" {% if session.get("username") %} value="{{ session.get("username") }}" {% endif %} {% if session.get("signing_phase") == 1 %}autofocus{% endif %}>
+                            {% if feedback_messages["username_field"]%}
+                                <div id="username_feedback_message">
+                                    {{ feedback_messages["username_field"]}}
+                                </div>
+                            {% endif %}
+                            {% if session.get("signing_phase") == 1 %}
+                                <div id="username_submit_button_container">
+                                    <input type="submit" name="username_submit_button" id="username_submit_button" value="continue">
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
 
-                {% if session.get("signing_phase") > 1 %}
-                    <input type="password" name="password" id="password" placeholder="password" {% if session.get("password") %} value="{{ session.get("password") }}" {% endif %} autofocus>
-                    {% if feedback_messages["password_field"] %} {{ feedback_messages["password_field"]}} {% endif %}
-                    <a href="/home"><input type="submit" name="submit_button" id="submit_button" value="sign up"></a>
-                {% endif %}
+                    {% if session.get("signing_phase") > 1 %}
+                        <div id="sign_up_password_form">
+                            <label for="password">Password :</label>
+                            <input type="password" name="password" id="sign_up_password" placeholder="password" autofocus>
+                            <div id="">
+                                {% if feedback_messages["password_field"] %}
+                                    <div id="sign_up_password_feedback_message">
+                                        {{ feedback_messages["password_field"]}}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div id="sign_up_password_submit_button_container">
+                                <input type="submit" name="password_submit_button" id="sign_up_password_submit_button" value="sign up">
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
-
 
             {% if session.get("signing_state") == "sign_in" %}
-                <input type="password" name="password" id="password" placeholder="password" >
-                {% if feedback_messages["password_field"] %} {{ feedback_messages["password_field"]}} {% endif %}
-                <input type="submit" name="submit_button" id="submit_button" value="sign in">
+                <div id="sign_in_password_form">
+                    <label for="password">Password :</label>
+                    <input type="password" name="password" id="password" placeholder="password" >
+                    {% if feedback_messages["password_field"] %}
+                        <div id="sign_in_password_feedback_message">
+                            {{ feedback_messages["password_field"]}}
+                        </div>
+                    {% endif %}
+                    <div id="sign_in_password_submit_button_container">
+                        <input type="submit" name="password_submit_button" id="sign_in_password_submit_button" value="sign in">
+                    </div>
+                </div>
             {% endif %}
-
         </form>
-    {% endif %}
+    </div>
 </body>
 </html>
