@@ -1,10 +1,6 @@
 """Imports"""
 import os
-from os import getenv
-
 from flask import Flask, redirect, session, render_template_string, request, g, send_from_directory, render_template
-from flask.globals import request_ctx
-
 from App import index, home, signing_manager
 from App.utils.db.user_db import *
 
@@ -37,9 +33,11 @@ if __name__ == "__main__":
 
     @flask_app.before_request
     def check_if_user_is_connected():
-        EXCLUDED_ROUTES = ["route_sign_in_or_up", "route_index", "route_favicon", "route_signing_css", "route_blob_image"]  # add routes as needed
+        EXCLUDED_ROUTES = ["route_sign_in_or_up", "route_index"]  # add routes as needed
         route_to_load = request.endpoint  # To make the code more readable
         print(f"route : {route_to_load}")
+        if route_to_load == "static":
+            return # Just go one so we do't need to put every static file in the excluded route list
         if route_to_load not in EXCLUDED_ROUTES:
             if route_to_load is not None:
                 if session.get('login_state') is None or 'login_state' not in session:
@@ -58,19 +56,6 @@ if __name__ == "__main__":
     def requests_counter():
         globals()["request_counter"] += 1
         print(f"request n°{globals()['request_counter']} since server was launched ")
-
-
-    @flask_app.route('/favicon.ico')
-    def route_favicon():
-        return send_from_directory(os.path.join(flask_app.root_path, 'static'),'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-    @flask_app.route('/static/css/signing.css')
-    def route_signing_css():
-        return send_from_directory('static/css', 'signing.css')
-
-    @flask_app.route('/static/images/blob.svg')
-    def route_blob_image():
-        return send_from_directory('static/images', 'blob.svg')
 
 
     @flask_app.route("/", methods=["GET", "POST"])
