@@ -28,6 +28,9 @@ class userDB:
     def fetch_all_emails(self):
         self.cursor.execute("SELECT email FROM users")
         emails = self.cursor.fetchall()
+        print("\n\t all emails :", end="")
+        print(emails)
+        print("\n")
         return emails
 
     def get_password_hash_by_email(self, email):
@@ -51,7 +54,7 @@ class userDB:
         return self.cursor.fetchone()[0]
 
     def create_user(self, username, email, password, creator_ip):
-        self.cursor.execute("INSERT INTO users (email, username, password, creator_ip) VALUES (?, ?, ?, ?)", (email, username, password, creator_ip))
+        self.cursor.execute("INSERT INTO users (username, email, password, creator_ip) VALUES (?, ?, ?, ?)", (username, email, password, creator_ip))
         print(f"created user with email : {email} and username : {username} ")
         self.conn.commit()
 

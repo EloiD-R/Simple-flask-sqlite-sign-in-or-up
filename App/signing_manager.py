@@ -35,7 +35,6 @@ def manage_signing(user_db, user_ip):
         feedback_messages["email_field"] = "Email valid"
         session['signing_state'] = determine_signing_state(user_db, email)
         session['signing_phase'] = determine_signing_phase(session.get("signing_state"))
-        print(f"signing_phase : {session['signing_phase']}")
     elif is_email_valid is False:
         session["signing_state"] = None
         feedback_messages["email_field"] = "Please enter a valid email address"
@@ -79,7 +78,7 @@ def sign_up(user_db, feedback_messages, user_ip):
         if is_password_valid is True:
             feedback_messages["password_field"] = "Password valid"
             password = hash_password(password)
-            user_db.create_user(email, username, password, user_ip)
+            user_db.create_user(username, email, password, user_ip)
             session.clear()
             session["email"], session["username"], session["login_state"] = email, username, True
         # If password is None -> pass
@@ -117,13 +116,14 @@ def determine_signing_phase(signing_state):
 
 # If email exists -> sign in, else -> sign up
 def determine_signing_state(user_db, user_email):
+    print("\n\t"+user_email + "\n")
     all_emails = user_db.fetch_all_emails()
     is_email_existing = "sign_up" # default value
     for email in all_emails:
         if email[0] == user_email:
             is_email_existing = "sign_in"
             break
-
+    print("\n\t"+is_email_existing + "\n")
     return is_email_existing
 
 
