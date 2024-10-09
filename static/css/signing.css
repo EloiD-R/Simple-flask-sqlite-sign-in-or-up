@@ -10,7 +10,6 @@ body{
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
-    overflow: hidden;
 }
 
 
@@ -42,8 +41,9 @@ body{
     justify-content: center;
     align-items: center;
     background-image: url("/static/images/blob.svg");
+    background-repeat: no-repeat;
     background-size: 110%;
-    background-position: top right;
+    background-position: center;
     margin-top: 4%; /* Adjust this value as needed */
 }
 

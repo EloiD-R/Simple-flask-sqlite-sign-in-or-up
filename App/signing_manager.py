@@ -4,10 +4,9 @@ import bcrypt
 import re
 
 """Loader"""
-def load(user_db):
-    print(request.form)
+def load(user_db, user_ip):
 
-    feedback_messages = manage_signing(user_db)
+    feedback_messages = manage_signing(user_db, user_ip)
 
     if feedback_messages["password_field"] == "Password valid":
         return redirect("/home")
@@ -16,7 +15,7 @@ def load(user_db):
 
 
 """Sign management"""
-def manage_signing(user_db):
+def manage_signing(user_db, user_ip):
     # Allows the html to render the submit button for the email, if the email's correct it will be changed later anyway
     session["signing_phase"] = 0
 
@@ -59,16 +58,16 @@ def manage_signing(user_db):
     # Sign_up :
     # If a state was determined watch for username, password. If both input are filled and ok -> create user, connect
     if signing_state == "sign_up":
-        feedback_messages = sign_up(user_db, feedback_messages)
+        feedback_messages = sign_up(user_db, feedback_messages, user_ip)
     # Sign_in :
     # If a state was determined, look for password, compare it to the hash, if it's all right -> connect
     elif signing_state == "sign_in":
-        feedback_messages = sign_in(user_db, feedback_messages)
+        feedback_messages = sign_in(user_db, feedback_messages, user_ip)
 
     return feedback_messages
 
 
-def sign_up(user_db, feedback_messages):
+def sign_up(user_db, feedback_messages, user_ip):
     signing_phase = session.get('signing_phase')
     email = session.get("email") ; username = session.get("username")
     # Signing_phase is set to at least 1 if state is defined
@@ -80,13 +79,13 @@ def sign_up(user_db, feedback_messages):
         if is_password_valid is True:
             feedback_messages["password_field"] = "Password valid"
             password = hash_password(password)
-            user_db.create_user(email, username, password)
+            user_db.create_user(email, username, password, user_ip)
             session.clear()
             session["email"], session["username"], session["login_state"] = email, username, True
         # If password is None -> pass
     return feedback_messages
 
-def sign_in(user_db, feedback_messages):
+def sign_in(user_db, feedback_messages, user_ip):
     signing_phase = session.get('signing_phase')
     email = session.get("email") ; username = session.get("username")
     if signing_phase > 0:
